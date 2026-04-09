@@ -20,7 +20,7 @@
     width: 100%; height: 100%; overflow: hidden;
     background: var(--bg); color: var(--text);
     font-family: 'Outfit', sans-serif;
-    cursor: auto;
+    cursor: auto; 
   }
 
   /* CLOCK BAR */
@@ -146,43 +146,43 @@
   #main::-webkit-scrollbar { display: none; }
 
   /* REALMTUBE CUSTOM INTERFACE */
-  #realmtube {
-    display: none;
-    height: 100vh;
-    overflow-y: auto;
-    padding: 80px 48px 60px;
+  #realmtube { 
+    display: none; 
+    height: 100vh; 
+    overflow-y: auto; 
+    padding: 80px 48px 60px; 
     background: #0f0f14;
   }
   #realmtube::-webkit-scrollbar { display: none; }
-
+  
   .rt-header {
     display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
   }
   .rt-logo { font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 10px;}
   .rt-logo span { color: #ff0000; }
-
+  
   .rt-back-btn {
-    background: var(--surface2); color: white; border: 2px solid transparent;
+    background: var(--surface2); color: white; border: 2px solid transparent; 
     padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
     font-family: 'Outfit', sans-serif; transition: 0.2s; outline: none;
   }
-  .rt-back-btn:hover, .rt-back-btn.focused {
-    background: var(--accent); transform: scale(1.05);
+  .rt-back-btn:hover, .rt-back-btn.focused { 
+    background: var(--accent); transform: scale(1.05); 
   }
 
   .rt-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
   }
-
+  
   .rt-video-card {
     background: var(--surface); border-radius: 12px; overflow: hidden; cursor: pointer;
     border: 2px solid transparent; transition: 0.2s; text-decoration: none; color: var(--text);
     display: block; outline: none;
   }
-  .rt-video-card:hover, .rt-video-card.focused {
-    border-color: #ff0000; transform: translateY(-5px);
+  .rt-video-card:hover, .rt-video-card.focused { 
+    border-color: #ff0000; transform: translateY(-5px); 
   }
-
+  
   .rt-video-thumb {
     height: 160px; background-size: cover; background-position: center;
     display: flex; justify-content: center; align-items: center; font-size: 50px;
@@ -200,6 +200,7 @@
 </style>
 </head>
 <body>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <div id="topbar">
   <div id="logo">Realm<span>TV</span></div>
@@ -275,12 +276,32 @@
 <div id="realmtube">
   <div class="rt-header">
     <div class="rt-logo">▶️ Realm<span>Tube</span></div>
-    <button class="rt-back-btn" onclick="closeRealmTube()">← Back to TV</button>
-  </div>
+    
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <div id="g_id_onload"
+           data-client_id="YOUR_CLIENT_ID_HERE.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleCredentialResponse"
+           data-auto_prompt="false">
+      </div>
 
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="signin_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+
+      <button class="rt-back-btn" onclick="closeRealmTube()">← Back to TV</button>
+    </div>
+  </div>
+  
   <div class="row-title" style="margin-top: 0;">Recommended For You</div>
   <div class="rt-grid">
-
+    
     <a class="rt-video-card" href="https://youtube.com/results?search_query=Spinosaurus+King+of+Dinosaurs" target="_blank">
       <div class="rt-video-thumb" style="background: linear-gradient(45deg, #1a1200, #3a2a00);">
         🦖
@@ -340,7 +361,7 @@
         <div class="rt-views">315K views • 1 month ago</div>
       </div>
     </a>
-
+    
     <a class="rt-video-card" href="https://youtube.com/results?search_query=android+studio+tips" target="_blank">
       <div class="rt-video-thumb" style="background: linear-gradient(45deg, #002200, #005500);">
         📱
@@ -365,20 +386,30 @@
 </div>
 
 <script>
+// --- AUTHENTICATION CALLBACK ---
+function handleCredentialResponse(response) {
+  // This runs the moment the user successfully signs in!
+  console.log("Login Success! Google sent back this token:");
+  console.log(response.credential);
+  
+  // Alert to confirm it worked
+  alert("Successfully signed in to Google!"); 
+}
+
+// --- UI AND NAVIGATION ---
 let focusIdx = -1;
 
-// SPA Navigation for RealmTube
 function openRealmTube() {
   document.getElementById('main').style.display = 'none';
   document.getElementById('realmtube').style.display = 'block';
   window.scrollTo(0,0);
-  focusIdx = -1; // Reset focus index when switching screens
+  focusIdx = -1; 
 }
 
 function closeRealmTube() {
   document.getElementById('realmtube').style.display = 'none';
   document.getElementById('main').style.display = 'block';
-  focusIdx = -1; // Reset focus index when switching screens
+  focusIdx = -1; 
 }
 
 const heroes = [
@@ -412,7 +443,6 @@ updateClock(); setInterval(updateClock, 1000);
 
 // Dynamic Keyboard Navigation
 const getFocusableItems = () => {
-  // Check which screen is currently visible to determine what can be focused
   if (document.getElementById('realmtube').style.display === 'block') {
     return Array.from(document.querySelectorAll('#realmtube .rt-back-btn, #realmtube .rt-video-card'));
   } else {
@@ -426,22 +456,21 @@ function moveFocus(dir) {
 
   if (focusIdx === -1) focusIdx = 0;
   items.forEach(el => el.classList.remove('focused'));
-
-  // Set movement jumps. If in RealmTube, jumps 4 at a time for up/down grid navigation
-  let jumpSize = document.getElementById('realmtube').style.display === 'block' ? 4 : 4;
-
+  
+  let jumpSize = document.getElementById('realmtube').style.display === 'block' ? 4 : 4; 
+  
   if (dir === 'right') focusIdx = Math.min(focusIdx + 1, items.length - 1);
   else if (dir === 'left') focusIdx = Math.max(focusIdx - 1, 0);
   else if (dir === 'down') focusIdx = Math.min(focusIdx + jumpSize, items.length - 1);
   else if (dir === 'up') focusIdx = Math.max(focusIdx - jumpSize, 0);
-
+  
   items[focusIdx].classList.add('focused');
   items[focusIdx].scrollIntoView({behavior:'smooth', block:'center'});
 }
 
 document.addEventListener('keydown', e => {
   const items = getFocusableItems();
-
+  
   if (e.key === 'ArrowRight') { e.preventDefault(); moveFocus('right'); }
   else if (e.key === 'ArrowLeft') { e.preventDefault(); moveFocus('left'); }
   else if (e.key === 'ArrowDown') { e.preventDefault(); moveFocus('down'); }
@@ -450,15 +479,15 @@ document.addEventListener('keydown', e => {
     if (focusIdx >= 0 && items[focusIdx]) {
       items[focusIdx].click();
     } else if (document.getElementById('main').style.display !== 'none') {
-      openHero(); // Only open hero banner if on the main screen
+      openHero(); 
     }
   }
-  else if (e.key === 'Escape') {
+  else if (e.key === 'Escape') { 
     if(document.getElementById('realmtube').style.display === 'block') {
-      closeRealmTube(); // Esc acts as a Back Button inside RealmTube
+      closeRealmTube(); 
     } else {
-      items.forEach(el => el.classList.remove('focused'));
-      focusIdx = -1;
+      items.forEach(el => el.classList.remove('focused')); 
+      focusIdx = -1; 
     }
   }
 });
