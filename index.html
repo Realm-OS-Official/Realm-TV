@@ -84,7 +84,7 @@
 
   .card-row { display: flex; gap: 14px; overflow: visible; }
 
-  /* APP ICONS ROW */
+  /* CARDS */
   .app-card {
     flex-shrink: 0; width: 100px; height: 100px;
     border-radius: 18px; background: var(--surface2);
@@ -100,7 +100,6 @@
   .app-icon { font-size: 36px; }
   .app-name { font-size: 11px; font-weight: 600; color: var(--muted); }
 
-  /* VIDEO CARDS ROW */
   .vid-card {
     flex-shrink: 0; width: 220px;
     border-radius: 12px; overflow: hidden;
@@ -141,11 +140,10 @@
     font-family: monospace; color: var(--text);
   }
 
-  /* MAIN SCROLL SECTION */
   #main { height: 100vh; overflow-y: auto; overflow-x: hidden; scroll-snap-type: none; }
   #main::-webkit-scrollbar { display: none; }
 
-  /* REALMTUBE CUSTOM INTERFACE */
+  /* REALMTUBE DASHBOARD */
   #realmtube { 
     display: none; 
     height: 100vh; 
@@ -155,9 +153,7 @@
   }
   #realmtube::-webkit-scrollbar { display: none; }
   
-  .rt-header {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
-  }
+  .rt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
   .rt-logo { font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 10px;}
   .rt-logo span { color: #ff0000; }
   
@@ -166,27 +162,24 @@
     padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
     font-family: 'Outfit', sans-serif; transition: 0.2s; outline: none;
   }
-  .rt-back-btn:hover, .rt-back-btn.focused { 
-    background: var(--accent); transform: scale(1.05); 
+  .rt-back-btn:hover, .rt-back-btn.focused { background: var(--accent); transform: scale(1.05); }
+
+  #user-profile {
+    display: none; align-items: center; gap: 10px; font-weight: 600; background: #1c1c28; padding: 8px 16px; border-radius: 20px;
   }
 
-  .rt-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
-  }
+  .rt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
   
   .rt-video-card {
     background: var(--surface); border-radius: 12px; overflow: hidden; cursor: pointer;
     border: 2px solid transparent; transition: 0.2s; text-decoration: none; color: var(--text);
     display: block; outline: none;
   }
-  .rt-video-card:hover, .rt-video-card.focused { 
-    border-color: #ff0000; transform: translateY(-5px); 
-  }
+  .rt-video-card:hover, .rt-video-card.focused { border-color: #ff0000; transform: translateY(-5px); }
   
   .rt-video-thumb {
     height: 160px; background-size: cover; background-position: center;
-    display: flex; justify-content: center; align-items: center; font-size: 50px;
-    position: relative;
+    display: flex; justify-content: center; align-items: center; font-size: 50px; position: relative;
   }
   .rt-duration {
     position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8);
@@ -197,6 +190,21 @@
   .rt-channel-name { font-size: 13px; color: var(--muted); margin-bottom: 4px;}
   .rt-views { font-size: 11px; color: #5a5a7a; }
 
+  /* IN-APP VIDEO PLAYER */
+  #rt-player-view {
+    display: none; position: fixed; inset: 0; background: #000; z-index: 200; flex-direction: column;
+  }
+  .rt-player-header {
+    padding: 20px 48px; display: flex; justify-content: flex-start;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    position: absolute; top: 0; left: 0; right: 0; z-index: 201;
+  }
+  .iframe-container {
+    flex: 1; display: flex; justify-content: center; align-items: center; padding-top: 60px;
+  }
+  iframe {
+    width: 85%; height: 85%; border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: #13131a;
+  }
 </style>
 </head>
 <body>
@@ -237,21 +245,6 @@
       <a class="app-card" href="https://primevideo.com" target="_blank">
         <div class="app-icon">📦</div><div class="app-name">Prime</div>
       </a>
-      <a class="app-card" href="https://hotstar.com" target="_blank">
-        <div class="app-icon">⭐</div><div class="app-name">Hotstar</div>
-      </a>
-      <a class="app-card" href="https://jiocinema.com" target="_blank">
-        <div class="app-icon">🎭</div><div class="app-name">JioCinema</div>
-      </a>
-      <a class="app-card" href="https://sonyliv.com" target="_blank">
-        <div class="app-icon">📺</div><div class="app-name">SonyLIV</div>
-      </a>
-      <a class="app-card" href="https://open.spotify.com" target="_blank">
-        <div class="app-icon">🎵</div><div class="app-name">Spotify</div>
-      </a>
-      <a class="app-card" href="https://twitch.tv" target="_blank">
-        <div class="app-icon">🟣</div><div class="app-name">Twitch</div>
-      </a>
     </div>
 
     <div class="row-title" style="margin-top:28px;">Trending Now</div>
@@ -259,14 +252,6 @@
       <a class="vid-card" href="https://youtube.com/results?search_query=trending" target="_blank">
         <div class="vid-thumb" style="background:#1a1a2e;font-size:48px;">🔥</div>
         <div class="vid-info"><div class="vid-title">Trending Videos</div><div class="vid-sub">YouTube</div></div>
-      </a>
-      <a class="vid-card" href="https://youtube.com/feed/music" target="_blank">
-        <div class="vid-thumb" style="background:#0d1b2a;font-size:48px;">🎵</div>
-        <div class="vid-info"><div class="vid-title">Music</div><div class="vid-sub">YouTube Music</div></div>
-      </a>
-      <a class="vid-card" href="https://youtube.com/gaming" target="_blank">
-        <div class="vid-thumb" style="background:#1b0a2e;font-size:48px;">🎮</div>
-        <div class="vid-info"><div class="vid-title">Gaming</div><div class="vid-sub">YouTube Gaming</div></div>
       </a>
     </div>
     <div style="height: 64px;"></div>
@@ -278,122 +263,117 @@
     <div class="rt-logo">▶️ Realm<span>Tube</span></div>
     
     <div style="display: flex; gap: 15px; align-items: center;">
-      <div id="g_id_onload"
-           data-client_id="69193669750-hq07jlsqlo1k09hj3ohbte3fcr0dls2g.apps.googleusercontent.com"
-           data-context="signin"
-           data-ux_mode="popup"
-           data-callback="handleCredentialResponse"
-           data-auto_prompt="false">
-      </div>
+      
+      <div id="user-profile">👤 Signed In</div>
 
-      <div class="g_id_signin"
-           data-type="standard"
-           data-shape="rectangular"
-           data-theme="outline"
-           data-text="signin_with"
-           data-size="large"
-           data-logo_alignment="left">
+      <div id="signin-container" style="display: flex; align-items: center;">
+        <div id="g_id_onload"
+             data-client_id="69193669750-hq07jlsqlo1k09hj3ohbte3fcr0dls2g.apps.googleusercontent.com.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
       </div>
 
       <button class="rt-back-btn" onclick="closeRealmTube()">← Back to TV</button>
     </div>
   </div>
   
-  <div class="row-title" style="margin-top: 0;">Recommended For You</div>
+  <div class="row-title" id="feed-title" style="margin-top: 0;">Default Recommendations</div>
   <div class="rt-grid">
     
-    <a class="rt-video-card" href="https://youtube.com/results?search_query=Spinosaurus+King+of+Dinosaurs" target="_blank">
-      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #1a1200, #3a2a00);">
-        🦖
-        <div class="rt-duration">14:23</div>
-      </div>
+    <div class="rt-video-card" tabindex="0" onclick="playVideo('W0zGrtBvIuw')">
+      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #1a1200, #3a2a00);">🦖<div class="rt-duration">14:23</div></div>
       <div class="rt-video-info">
         <div class="rt-video-title">Why Spinosaurus is the TRUE King of the Dinosaurs</div>
         <div class="rt-channel-name">Dino Lore Central</div>
         <div class="rt-views">1.2M views • 2 days ago</div>
       </div>
-    </a>
+    </div>
 
-    <a class="rt-video-card" href="https://youtube.com/results?search_query=custom+linux+distro+MX+Linux" target="_blank">
-      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #0a1f1a, #103b30);">
-        🐧
-        <div class="rt-duration">22:05</div>
-      </div>
+    <div class="rt-video-card" tabindex="0" onclick="playVideo('VzYxN3J_6w4')">
+      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #0a1f1a, #103b30);">🐧<div class="rt-duration">22:05</div></div>
       <div class="rt-video-info">
-        <div class="rt-video-title">Building a Custom OS Based on MX Linux</div>
+        <div class="rt-video-title">Building a Custom OS Based on Linux</div>
         <div class="rt-channel-name">Tech Builder</div>
         <div class="rt-views">45K views • 1 week ago</div>
       </div>
-    </a>
+    </div>
 
-    <a class="rt-video-card" href="https://youtube.com/results?search_query=The+Flash+best+speedster+moments" target="_blank">
-      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #3a0000, #ff2a00);">
-        ⚡
-        <div class="rt-duration">10:18</div>
-      </div>
+    <div class="rt-video-card" tabindex="0" onclick="playVideo('50PqH0DkEew')">
+      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #3a0000, #ff2a00);">⚡<div class="rt-duration">10:18</div></div>
       <div class="rt-video-info">
         <div class="rt-video-title">The Flash: Top 10 Most Epic Speedster Moments</div>
         <div class="rt-channel-name">Hero Universe</div>
         <div class="rt-views">890K views • 3 months ago</div>
       </div>
-    </a>
+    </div>
 
-    <a class="rt-video-card" href="https://youtube.com/results?search_query=Roblox+vs+Minecraft+which+is+better" target="_blank">
-      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #0d1b2a, #1a365d);">
-        🎮
-        <div class="rt-duration">18:45</div>
-      </div>
-      <div class="rt-video-info">
-        <div class="rt-video-title">Roblox vs Minecraft: Ultimate Showdown 2026</div>
-        <div class="rt-channel-name">GamerBro</div>
-        <div class="rt-views">2.4M views • 5 days ago</div>
-      </div>
-    </a>
-
-    <a class="rt-video-card" href="https://youtube.com/results?search_query=learn+python+in+1+hour" target="_blank">
-      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #1a202c, #2d3748);">
-        🐍
-        <div class="rt-duration">59:59</div>
-      </div>
+    <div class="rt-video-card" tabindex="0" onclick="playVideo('kqtD5dpn9C8')">
+      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #1a202c, #2d3748);">🐍<div class="rt-duration">59:59</div></div>
       <div class="rt-video-info">
         <div class="rt-video-title">Python Crash Course for App Developers</div>
         <div class="rt-channel-name">Code Academy</div>
         <div class="rt-views">315K views • 1 month ago</div>
       </div>
-    </a>
-    
-    <a class="rt-video-card" href="https://youtube.com/results?search_query=android+studio+tips" target="_blank">
-      <div class="rt-video-thumb" style="background: linear-gradient(45deg, #002200, #005500);">
-        📱
-        <div class="rt-duration">08:12</div>
-      </div>
-      <div class="rt-video-info">
-        <div class="rt-video-title">Android Studio Secret Features You Didn't Know</div>
-        <div class="rt-channel-name">Dev Life</div>
-        <div class="rt-views">12K views • 4 hours ago</div>
-      </div>
-    </a>
+    </div>
 
   </div>
   <div style="height: 80px;"></div>
+</div>
+
+<div id="rt-player-view">
+  <div class="rt-player-header">
+    <button class="rt-back-btn" onclick="closeVideo()">← Close Video</button>
+  </div>
+  <div class="iframe-container">
+    <iframe id="yt-iframe" src="" allow="autoplay; encrypted-media; fullscreen"></iframe>
+  </div>
 </div>
 
 <div id="bottombar">
   <div class="key-hint"><kbd>↑↓←→</kbd> Navigate</div>
   <div class="key-hint"><kbd>Enter</kbd> Open</div>
   <div class="key-hint"><kbd>F11</kbd> Fullscreen</div>
-  <div class="key-hint"><kbd>Esc</kbd> Back</div>
+  <div class="key-hint"><kbd>Esc</kbd> Back/Close</div>
 </div>
 
 <script>
-// --- AUTHENTICATION CALLBACK ---
+// --- AUTHENTICATION & MULTI-ACCOUNT LOGIN ---
 function handleCredentialResponse(response) {
-  // This runs the moment the user successfully signs in!
-  console.log("Login Success! Google sent back this token:");
-  console.log(response.credential);
+  // 1. Hide the Google Sign In button
+  document.getElementById('signin-container').style.display = 'none';
   
-  // Alert to confirm it worked
-  alert("Successfully signed in to Google!"); 
+  // 2. Show the User Profile Badge
+  document.getElementById('user-profile').style.display = 'flex';
+  
+  // 3. Change the UI to show this is now a personalized feed
+  document.getElementById('feed-title').textContent = "Your Personal Subscriptions (Signed In)";
+  
+  // (In the future, this is where you take the response.credential token and send it to the YouTube Data API to pull their actual real-time videos!)
+}
+
+// --- VIDEO PLAYER LOGIC ---
+function playVideo(videoId) {
+  // Hide RealmTube Grid
+  document.getElementById('realmtube').style.display = 'none';
+  // Show Player View
+  document.getElementById('rt-player-view').style.display = 'flex';
+  // Embed the video and force autoplay
+  document.getElementById('yt-iframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&controls=1";
+}
+
+function closeVideo() {
+  // Stop the video playing in the background
+  document.getElementById('yt-iframe').src = "";
+  // Hide Player
+  document.getElementById('rt-player-view').style.display = 'none';
+  // Show Grid
+  document.getElementById('realmtube').style.display = 'block';
+  // Reset keyboard focus
+  focusIdx = -1;
 }
 
 // --- UI AND NAVIGATION ---
@@ -415,7 +395,6 @@ function closeRealmTube() {
 const heroes = [
   { title:"Jurassic World", tag:"Movie • Action", desc:"Dinosaurs run wild as scientists push genetic boundaries beyond control. A thrilling ride from start to finish.", bg:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80", url:"https://youtube.com/results?search_query=jurassic+world+trailer" },
   { title:"YouTube Trending", tag:"Trending Now", desc:"Catch what the world is watching right now — viral videos, music, gaming, and more.", bg:"https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1600&q=80", url:"https://youtube.com/feed/trending" },
-  { title:"Discover India", tag:"Documentary", desc:"Explore the incredible landscapes, cultures, and history of the Indian subcontinent in stunning detail.", bg:"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1600&q=80", url:"https://youtube.com/results?search_query=india+documentary" },
 ];
 let heroIdx = 0;
 
@@ -443,7 +422,9 @@ updateClock(); setInterval(updateClock, 1000);
 
 // Dynamic Keyboard Navigation
 const getFocusableItems = () => {
-  if (document.getElementById('realmtube').style.display === 'block') {
+  if (document.getElementById('rt-player-view').style.display === 'flex') {
+    return Array.from(document.querySelectorAll('#rt-player-view .rt-back-btn'));
+  } else if (document.getElementById('realmtube').style.display === 'block') {
     return Array.from(document.querySelectorAll('#realmtube .rt-back-btn, #realmtube .rt-video-card'));
   } else {
     return Array.from(document.querySelectorAll('#main .app-card, #main .vid-card, #main .hero-btn'));
@@ -483,8 +464,10 @@ document.addEventListener('keydown', e => {
     }
   }
   else if (e.key === 'Escape') { 
-    if(document.getElementById('realmtube').style.display === 'block') {
-      closeRealmTube(); 
+    if (document.getElementById('rt-player-view').style.display === 'flex') {
+      closeVideo(); // Esc closes the video
+    } else if (document.getElementById('realmtube').style.display === 'block') {
+      closeRealmTube(); // Esc closes RealmTube
     } else {
       items.forEach(el => el.classList.remove('focused')); 
       focusIdx = -1; 
